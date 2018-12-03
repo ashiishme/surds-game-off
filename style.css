@@ -11,8 +11,7 @@ ul li {
 
 body { 
 	position: relative;
-  	font-family: 'Black Han Sans', sans-serif;
- 
+  	font-family: 'Open Sans', sans-serif;
 }
 
 body > canvas { 
@@ -27,6 +26,7 @@ body > canvas {
 #gamebar {
 	display: flex;
 	margin: 1rem 5rem;
+	font-family: 'Black Han Sans', sans-serif;
 }
 
 #mission {
@@ -73,4 +73,41 @@ canvas { background: #eee; }
 	margin: 0.5em auto;
 	text-align: center;
 	border: 0;
+}
+
+.game-settings {
+	background: #FFF;
+	padding: 2em;
+	text-align: center;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.setting-form div {
+	margin: 1em 0;
+}
+
+input, select {
+	background: #eee;
+	border: 0;
+	margin-top: 1em;
+	padding: 0.5em;
+	width: 100%;
+}
+
+.game-settings-list p {
+	border-bottom: 1px solid;
+	border-color: #eee;
+	padding-bottom: 1em;
+}
+
+.instruction {
+	text-align: center;
+	margin: 0.5rem auto 0 auto;
+}
+
+.instruction p {
+	font-size: 0.8rem;
 }
