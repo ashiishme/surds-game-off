@@ -28,7 +28,8 @@ canvas.height = 550;
 
 let player_is_immortal = true;
 
-let keys = {up: false, down: false, left: false, right: false};
+let keys = {up: false, down: false, left: false, right: false,
+			w: false, a: false, s: false, d: false};
 
 setTimeout(make_player_mortal, 5000);
 
@@ -273,7 +274,7 @@ function genRandomEnemies(ud_enemies) {
 	if(ud_enemies >= 2 && ud_enemies <= 30) { default_enemy = ud_enemies; }
 
 	while(enemy != default_enemy) {
-		
+
 		let radius = Math.random() * (maxRadius - minRadius) + minRadius;
 		let x = Math.floor(Math.random() * (canvas.width - radius ) + radius);
 		let y = Math.floor(Math.random() * (canvas.height - radius ) + radius);
@@ -342,6 +343,26 @@ document.addEventListener("keydown", event => {
 		event.preventDefault();
 		break;
 
+		case 87:
+		keys.w = true;
+		event.preventDefault();
+		break;
+
+		case 65:
+		keys.a = true;
+		event.preventDefault();
+		break;
+
+		case 83:
+		keys.s = true;
+		event.preventDefault();
+		break;
+
+		case 68:
+		keys.d = true;
+		event.preventDefault();
+		break;
+
 	}
 
 });
@@ -367,6 +388,26 @@ document.addEventListener("keyup", event => {
 
 		case 40:
 		keys.down = false;
+		event.preventDefault();
+		break;
+
+		case 87:
+		keys.w = false;
+		event.preventDefault();
+		break;
+
+		case 65:
+		keys.a = false;
+		event.preventDefault();
+		break;
+
+		case 83:
+		keys.s = false;
+		event.preventDefault();
+		break;
+
+		case 68:
+		keys.d = false;
 		event.preventDefault();
 		break;
 
@@ -449,10 +490,10 @@ function update() {
 
 	collectLetter(player, letters);
 
-	if (keys.up) { player.accelerate(); }
-	if (keys.down) { player.accelerate(true); }
-	if (keys.left) { player.rotate("left");   }
-	if (keys.right) { player.rotate("right");  }
+	if (keys.up || keys.w) { player.accelerate(); }
+	if (keys.down || keys.s) { player.accelerate(true); }
+	if (keys.left || keys.a) { player.rotate("left");   }
+	if (keys.right || keys.d) { player.rotate("right");  }
 	
 
 	player.move();
