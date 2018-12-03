@@ -13,9 +13,9 @@ let size;
 let gameEnds = false;
 let gameWins = false;
 let colors = ["#D81B60", "#8E24AA", "#1E88E5", "#00897B", "#43A047", "#C0CA33", "#FDD835",
-"#FFB300", "#F4511E", "#6D4C41"];
+"#FFB300", "#F4511E", "#6D4C41", "#e53935", "#6D4C41"];
 let words = ["donateme", "github", "itchio", "gameoff", "opensource",
- "canvas", "javascript", "ashiishme", "icantshoot"];
+ "canvas", "javascript", "ashiishme", "icantshoot", "ratemeplease"];
 let currentWord;
 let player;
 let maxVelocity = 1.4;
@@ -26,13 +26,74 @@ let minRadius = 8;
 canvas.width = 1200;
 canvas.height = 550;
 
+let player_is_immortal = true;
+
 let keys = {up: false, down: false, left: false, right: false};
+
+setTimeout(make_player_mortal, 5000);
+
+function make_player_mortal() {
+
+	player_is_immortal = false;
+
+}
 
 function getDistance(x1, y1, x2, y2) {
 	var xDistance = x2 - x1;
 	var yDistance = y2 - y1;
 	return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
 }
+
+function get_ud_enemies() {
+
+	let enemies = document.getElementById('enemy_numbers').value;
+
+	return enemies;
+
+}
+
+function set_ud_words() {
+
+	let user_words = document.getElementById('user_words').value;
+
+	if(user_words) {
+
+		let udw_arr = user_words.split(',').map((arr) => {return arr.trim()});
+
+		let temp_arr = [];
+
+		for(let i = 0; i < udw_arr.length; i++) {
+
+			if(udw_arr[i].length <= 12) {
+
+				temp_arr.push(udw_arr[i]);
+
+			}
+
+		}
+
+		words = temp_arr;	
+
+	}
+
+}
+
+function get_ud_order() {
+
+	let points_order = document.getElementById('points_order').value;
+
+	console.log(points_order);
+
+	if(points_order == 'select') {
+
+		return 'particular';
+
+	}
+
+	return points_order;
+}
+
+// Game Objects
 
 const Enemy = function(x,y,dx,dy,radius) {
 	this.x = x;
@@ -203,12 +264,16 @@ Player.prototype = {
 };
 
 
-function genRandomEnemies() {
+function genRandomEnemies(ud_enemies) {
 
 	let enemy = 0;
 
-	while(enemy != 20) {
+	let default_enemy = 20;
 
+	if(ud_enemies >= 2 && ud_enemies <= 30) { default_enemy = ud_enemies; }
+
+	while(enemy != default_enemy) {
+		
 		let radius = Math.random() * (maxRadius - minRadius) + minRadius;
 		let x = Math.floor(Math.random() * (canvas.width - radius ) + radius);
 		let y = Math.floor(Math.random() * (canvas.height - radius ) + radius);
@@ -244,7 +309,6 @@ function randomString(str) {
 		li.textContent = str[letter];
 		li.style.background = color;
 		gameBar.appendChild(li);
-
 		letter++;
 
 	}
@@ -313,10 +377,14 @@ document.addEventListener("keyup", event => {
 
 function collision(enemy, player) {
 
-	if(getDistance(enemy.x, enemy.y, player.x, player.y) - enemy.radius * 2 < 0) {
+	if(!player_is_immortal) {
 
-		gameEnds = true;
+		if(getDistance(enemy.x, enemy.y, player.x, player.y) - enemy.radius * 2 < 0) {
+
+			gameEnds = true;
 						
+		}
+
 	}
 
 }
@@ -324,38 +392,53 @@ function collision(enemy, player) {
 let collectedLetter = [];
 
 
+
 function collectLetter(player, letters) {
 
-	for(let i = 0; i < letters.length; i++) {
+	if(!player_is_immortal) {
 
-		if(getDistance(player.x, player.y, letters[i].x, letters[i].y) - player.radius * 2 < 0) {
+		for(let i = 0; i < letters.length; i++) {
 
-			collectedLetter.push(letters[i]);
-			let li = document.createElement('li');
-			li.textContent = letters[i].char;
-			li.style.background = letters[i].color;
-			collection.appendChild(li);
-			letters.splice(i, 1);
+			if(getDistance(player.x, player.y, letters[i].x, letters[i].y) - player.radius * 2 < 0) {
+
+				collectedLetter.push(letters[i]);
+				let li = document.createElement('li');
+				li.textContent = letters[i].char;
+				li.style.background = letters[i].color;
+				collection.appendChild(li);
+				letters.splice(i, 1);
+			}
+
 		}
 
 	}
 
-	if(collectedLetter.length === size) {
+	if(get_ud_order() == 'particular') {
+
+		if(collectedLetter.length === size) {
 
 		let collectedWord = collectedLetter.map(function(elem){ return elem.char;}).join('');
 
-		if(collectedWord === currentWord) {
+			if(collectedWord === currentWord) {
+
+				gameWins = true;
+
+			} else {
+
+				gameEnds = true;
+			}
+
+		}
+
+	} else if(get_ud_order() == 'random') {
+
+		if(collectedLetter.length === size) {
 
 			gameWins = true;
 
-		} else {
-
-			gameEnds = true;
 		}
 
 	}
-
-	
 
 }
 
@@ -397,19 +480,23 @@ function update() {
 
 }
 
+let gs = document.querySelector('.game-settings');
+
 start.addEventListener('click', () => {
 	startGame();
 	start.style.display = 'none';
+	gs.style.display = 'none';
 });
 
 function startGame() {
-
-	let randomWord = Math.floor(Math.random() * (9 - 0) + 0);
-	genRandomEnemies();
+	set_ud_words();
+	let max = words.length;
+	let randomWord = Math.floor(Math.random() * (max - 0) + 0);
+	genRandomEnemies(get_ud_enemies());
 	randomString(words[randomWord]);
 	size = words[randomWord].length;
 	currentWord = words[randomWord];
-	update();	
+	update();
 
 }
 
@@ -425,7 +512,6 @@ function gameWin() {
 }
 
 function gameOver() {
-
 	context.clearRect(0,0, canvas.width, canvas.height);
 	window.cancelAnimationFrame(update);
 	game_over.style.display = 'block';
