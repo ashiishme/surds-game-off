@@ -29,7 +29,7 @@ canvas.height = 550;
 let player_is_immortal = true;
 
 let keys = {up: false, down: false, left: false, right: false,
-			w: false, a: false, s: false, d: false};
+			w: true, a: true, s: true, d: true};
 
 setTimeout(make_player_mortal, 5000);
 
@@ -319,8 +319,9 @@ function randomString(str) {
 
 player = new Player(canvas.width / 2, canvas.height / 2, 0, 10, "#FFF");
 
-document.addEventListener("keydown", event => {
-	
+
+function btn_keydown(event) {
+
 	switch(event.keyCode) {
 
 		case 37:
@@ -365,9 +366,9 @@ document.addEventListener("keydown", event => {
 
 	}
 
-});
+}
 
-document.addEventListener("keyup", event => {
+function btn_keyup(event) {
 	
 	switch(event.keyCode) {
 
@@ -413,7 +414,7 @@ document.addEventListener("keyup", event => {
 
 	}
 
-});
+}
 
 
 function collision(enemy, player) {
@@ -527,6 +528,13 @@ start.addEventListener('click', () => {
 	startGame();
 	start.style.display = 'none';
 	gs.style.display = 'none';
+	keys.w = false;
+	keys.a = false;
+	keys.s = false;
+	keys.d = false;
+	document.addEventListener("keydown", btn_keydown, false);
+	document.addEventListener("keyup", btn_keyup, false);
+
 });
 
 function startGame() {
