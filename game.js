@@ -1,11 +1,13 @@
 
 "use strict";
-
+// Constants
 const canvas = document.getElementById('canvas');
 const gameBar = document.getElementById('mission');
 const collection = document.getElementById('collection');
+// game start
 let start = document.querySelector('.start');
 const game_over = document.querySelector('.game-over');
+// 2d context
 const context = canvas.getContext('2d');
 let enemies = [];
 let letters = [];
