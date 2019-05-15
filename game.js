@@ -36,9 +36,7 @@ let keys = {up: false, down: false, left: false, right: false,
 setTimeout(make_player_mortal, 5000);
 
 function make_player_mortal() {
-
 	player_is_immortal = false;
-
 }
 
 function getDistance(x1, y1, x2, y2) {
@@ -48,56 +46,33 @@ function getDistance(x1, y1, x2, y2) {
 }
 
 function get_ud_enemies() {
-
 	let enemies = document.getElementById('enemy_numbers').value;
-
 	return enemies;
-
 }
 
 function set_ud_words() {
-
 	let user_words = document.getElementById('user_words').value;
-
 	if(user_words) {
-
 		let udw_arr = user_words.split(',').map((arr) => {return arr.trim()});
-
 		let temp_arr = [];
-
 		for(let i = 0; i < udw_arr.length; i++) {
-
 			if(udw_arr[i].length <= 12) {
-
 				temp_arr.push(udw_arr[i]);
-
 			}
-
 		}
-
 		words = temp_arr;	
-
 	}
-
 }
 
 function get_ud_order() {
-
 	let points_order = document.getElementById('points_order').value;
-
-	console.log(points_order);
-
 	if(points_order == 'select') {
-
 		return 'particular';
-
 	}
-
 	return points_order;
 }
 
 // Game Objects
-
 const Enemy = function(x,y,dx,dy,radius) {
 	this.x = x;
 	this.y = y;
@@ -107,32 +82,25 @@ const Enemy = function(x,y,dx,dy,radius) {
 };
 
 Enemy.prototype = {
-
 	draw: function() {
 		context.beginPath();
 		context.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
 		context.fillStyle = "#c62828";
 		context.fill();
-
 	},
-
 	update: function() {
-
 		if(this.x + this.dx > canvas.width - this.radius 
 			|| this.x + this.dx < this.radius) {
 			this.dx = -this.dx;
 		}
-
 		if(this.y + this.dy > canvas.height - this.radius 
 			|| this.y + this.dy < this.radius) {
 			this.dy = -this.dy;
 		}
-
 		this.x += this.dx;
 		this.y += this.dy;
 		this.draw();
 	}
-
 };
 
 const Letter = function(char,x,y,dx,dy,radius,color) {
@@ -160,16 +128,14 @@ Letter.prototype = {
 		if(this.x + this.dx > canvas.width - this.radius 
 			|| this.x + this.dx < this.radius) {
 			this.dx = -this.dx;
-	}
-
-	if(this.y + this.dy > canvas.height - this.radius 
-		|| this.y + this.dy < this.radius) {
-		this.dy = -this.dy;
-	}
-
-	this.x += this.dx;
-	this.y += this.dy;
-	this.draw();
+		}
+		if(this.y + this.dy > canvas.height - this.radius 
+			|| this.y + this.dy < this.radius) {
+			this.dy = -this.dy;
+		}
+		this.x += this.dx;
+		this.y += this.dy;
+		this.draw();
 	}
 };
 
@@ -201,7 +167,6 @@ Player.prototype = {
 			this.ay += this.accAmount;
 		}
 	},
-
 	move: function() {
 		this.angle += this.rv;
 		this.vx += this.ax;
@@ -214,7 +179,6 @@ Player.prototype = {
 		this.vy *= this.friction;
 		this.rv *= this.friction;
 	},
-
 	rotate: function(dir) {
 		if(dir === "left") {
 			this.rv -= this.rotateSpeed;
@@ -222,7 +186,6 @@ Player.prototype = {
 			this.rv += this.rotateSpeed;
 		}
 	},
-
 	draw: function() {
 		context.save();
 		context.translate(this.x, this.y);
@@ -242,90 +205,65 @@ Player.prototype = {
 		context.restore();
 
 	},
-
 	update: function() {
-
 		if(this.x + this.size > canvas.width) {
 			this.x = canvas.width - 10;
 		}
-
 		if(this.x + this.size < 20) {
 			this.x = 10;
 		}
-
 		if(this.y + this.size > canvas.height) {
 			this.y = canvas.height - 10;
 		}
-
 		if(this.y + this.size < 20) {
 			this.y = 10;
 		}
-
 		this.draw();
-
 	}
 };
 
 
 function genRandomEnemies(ud_enemies) {
-
 	let enemy = 0;
-
 	let default_enemy = 20;
-
 	if(ud_enemies >= 2 && ud_enemies <= 30) { default_enemy = ud_enemies; }
-
 	while(enemy != default_enemy) {
-
 		let radius = Math.random() * (maxRadius - minRadius) + minRadius;
 		let x = Math.floor(Math.random() * (canvas.width - radius ) + radius);
 		let y = Math.floor(Math.random() * (canvas.height - radius ) + radius);
 		let xVelocity = Math.random() * (maxVelocity - minVelocity) + minVelocity;
 		let yVelocity = Math.random() * (maxVelocity - minVelocity) + minVelocity;
-		
-
 		enemies.push(new Enemy(x,y,xVelocity,yVelocity,radius));
-
 		enemy++;
-
 	}
-
 }
 
 let missionLetters = [];
 
 function randomString(str) {
-
 	let letter = 0;
-
 	while(letter < str.length) {
-
 		let x = Math.floor(Math.random() * (canvas.width - 10 ) + 10);
 		let y = Math.floor(Math.random() * (canvas.height - 10 ) + 10);
 		let dx = Math.random() * (maxVelocity - minVelocity) + minVelocity;
 		let dy = Math.random() * (maxVelocity - minVelocity) + minVelocity;
 		let color = colors[letter];
-
 		letters.push(new Letter(str[letter], x, y, dx, dy, 10, color));
-
 		let li = document.createElement('li');
 		li.textContent = str[letter];
 		li.style.background = color;
 		gameBar.appendChild(li);
 		letter++;
-
 	}
-
 }
 
 
 player = new Player(canvas.width / 2, canvas.height / 2, 0, 10, "#FFF");
 
-
 function btn_keydown(event) {
-
+	
 	switch(event.keyCode) {
-
+			
 		case 37:
 		keys.left = true;
 		event.preventDefault();
@@ -420,17 +358,11 @@ function btn_keyup(event) {
 
 
 function collision(enemy, player) {
-
 	if(!player_is_immortal) {
-
 		if(getDistance(enemy.x, enemy.y, player.x, player.y) - enemy.radius * 2 < 0) {
-
 			gameEnds = true;
-						
 		}
-
 	}
-
 }
 
 let collectedLetter = [];
