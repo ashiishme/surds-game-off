@@ -367,16 +367,10 @@ function collision(enemy, player) {
 
 let collectedLetter = [];
 
-
-
 function collectLetter(player, letters) {
-
 	if(!player_is_immortal) {
-
 		for(let i = 0; i < letters.length; i++) {
-
 			if(getDistance(player.x, player.y, letters[i].x, letters[i].y) - player.radius * 2 < 0) {
-
 				collectedLetter.push(letters[i]);
 				let li = document.createElement('li');
 				li.textContent = letters[i].char;
@@ -384,76 +378,47 @@ function collectLetter(player, letters) {
 				collection.appendChild(li);
 				letters.splice(i, 1);
 			}
-
 		}
-
 	}
-
 	if(get_ud_order() == 'particular') {
-
 		if(collectedLetter.length === size) {
-
 		let collectedWord = collectedLetter.map(function(elem){ return elem.char;}).join('');
-
 			if(collectedWord === currentWord) {
-
 				gameWins = true;
-
 			} else {
-
 				gameEnds = true;
 			}
-
 		}
-
 	} else if(get_ud_order() == 'random') {
-
 		if(collectedLetter.length === size) {
-
 			gameWins = true;
-
 		}
-
 	}
-
 }
 
-
-function update() {
-	
+function update() {	
 	context.clearRect(0,0, canvas.width, canvas.height);
-
 	collectLetter(player, letters);
-
 	if (keys.up || keys.w) { player.accelerate(); }
 	if (keys.down || keys.s) { player.accelerate(true); }
 	if (keys.left || keys.a) { player.rotate("left");   }
 	if (keys.right || keys.d) { player.rotate("right");  }
-	
-
 	player.move();
-
 	enemies.forEach(enemy => {
 		enemy.update(enemies, letters);
 		collision(enemy, player);
 	});
-
 	letters.forEach(letter => {
 		letter.update();
 	});
-
 	player.update();
-
 	if(gameWins) {
 		gameWin();
 	}
-
 	if(gameEnds) {
 		gameOver();
 	}
-
 	requestAnimationFrame(update);
-
 }
 
 let gs = document.querySelector('.game-settings');
@@ -468,7 +433,6 @@ start.addEventListener('click', () => {
 	keys.d = false;
 	document.addEventListener("keydown", btn_keydown, false);
 	document.addEventListener("keyup", btn_keyup, false);
-
 });
 
 function startGame() {
@@ -480,7 +444,6 @@ function startGame() {
 	size = words[randomWord].length;
 	currentWord = words[randomWord];
 	update();
-
 }
 
 let h1 = document.querySelector('.game-over h1');
@@ -500,5 +463,4 @@ function gameOver() {
 	game_over.style.display = 'block';
 	h1.textContent = "Game Over";
 	retryBtn.textContent = "Let Me Try Once Again!!";
-
 }
