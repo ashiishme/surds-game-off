@@ -8,7 +8,7 @@ This game interpret **HYBRID** theme on its gameplay.
 
 ## About SURDS
 
-Surds game is a 2D HTML5 Canvas web based game. The user have to dodge and survive the red balls (enemies) and collect points (letters) to win. The default setting for letter collection is to collect the points(letters) in a particular order.
+Surds game is a 2D HTML5 Canvas web based game. The user has to dodge and survive the red balls (enemies) and collect points (letters) to win. The default setting for letter collection is to collect the points(letters) in a particular order.
 
 Playable at itch.io
 
