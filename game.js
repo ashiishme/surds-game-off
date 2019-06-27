@@ -1,4 +1,4 @@
-
+// Strict Mode
 "use strict";
 // Constants
 const canvas = document.getElementById('canvas');
